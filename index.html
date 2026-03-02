@@ -2,41 +2,107 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Important Message</title>
+  <title>DVD Popup Demo</title>
   <style>
     body {
-      background: black;
+      background: #111;
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 20%;
+      margin-top: 15%;
     }
     button {
       padding: 12px 24px;
       font-size: 18px;
       cursor: pointer;
+      margin: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Click the button for something important</h1>
-  <button onclick="startPrank()">Do Not Click</button>
+  <h1>DVD Bouncing Popup Demo</h1>
+  <button onclick="openPopups()">Open Popups</button>
+  <button onclick="closePopups()">Close All</button>
 
   <script>
-    function startPrank() {
-      let count = 0;
-      const maxPopups = 1000; // Safe limit
+    let popups = [];
+    const maxPopups = 1000; // keep this reasonable
 
-      const interval = setInterval(() => {
-        alert("You are an idiot dumbass");
+    function openPopups() {
+      for (let i = 0; i < maxPopups; i++) {
 
-        count++;
-        if (count >= maxPopups) {
-          clearInterval(interval);
-          alert("lululaa.");
+        let popup = window.open(
+          "",
+          "",
+          "width=400,height=300"
+        );
+
+        if (!popup) continue;
+
+        popup.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>DVD Bounce</title>
+            <style>
+              body {
+                margin: 0;
+                overflow: hidden;
+                background: black;
+              }
+              #logo {
+                position: absolute;
+                font-family: Arial, sans-serif;
+                font-size: 24px;
+                font-weight: bold;
+                color: lime;
+              }
+            </style>
+          </head>
+          <body>
+            <div id="logo">You are an iidiot 😜</div>
+
+            <script>
+              const logo = document.getElementById("logo");
+              let x = 100;
+              let y = 100;
+              let dx = 2;
+              let dy = 2;
+
+              function animate() {
+                const width = window.innerWidth - logo.offsetWidth;
+                const height = window.innerHeight - logo.offsetHeight;
+
+                x += dx;
+                y += dy;
+
+                if (x <= 0 || x >= width) dx *= -1;
+                if (y <= 0 || y >= height) dy *= -1;
+
+                logo.style.left = x + "px";
+                logo.style.top = y + "px";
+
+                requestAnimationFrame(animate);
+              }
+
+              animate();
+            <\/script>
+          </body>
+          </html>
+        `);
+
+        popups.push(popup);
+      }
+    }
+
+    function closePopups() {
+      popups.forEach(p => {
+        if (p && !p.closed) {
+          p.close();
         }
-      }, 500);
+      });
+      popups = [];
     }
   </script>
 
