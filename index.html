@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Ultimate DVD Popup Demo</title>
+  <title>Multi DVD Popup Chaos</title>
   <style>
     body {
       background: #111;
@@ -21,125 +21,128 @@
 </head>
 <body>
 
-  <h1>DVD Window Bounce Demo</h1>
-  <p>Educational popup demo (limited & safe)</p>
+  <h1>Multi DVD Popup Chaos</h1>
+  <p>Click multiple times to spawn more bouncing windows</p>
 
-  <button onclick="openPopups()">Open Popups</button>
+  <button onclick="openPopup()">Spawn Popup</button>
   <button onclick="closePopups()">Close All</button>
 
   <script>
     let popups = [];
-    const maxPopups = 100;
+    const maxTotalPopups = 10;
 
-    function openPopups() {
-      for (let i = 0; i < maxPopups; i++) {
+    function openPopup() {
 
-        const width = 400;
-        const height = 300;
+      if (popups.length >= maxTotalPopups) {
+        alert("Maximum popup limit reached 😈");
+        return;
+      }
 
-        const popup = window.open(
-          "",
-          "",
-          `width=${width},height=${height}`
-        );
+      const width = 400;
+      const height = 300;
 
-        if (!popup) continue;
+      const popup = window.open(
+        "",
+        "",
+        `width=${width},height=${height}`
+      );
 
-        popup.document.open();
-        popup.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>DVD Bounce</title>
-            <style>
-              body {
-                margin: 0;
-                overflow: hidden;
-                background: black;
-                font-family: Arial, sans-serif;
-              }
-              #msg {
-                position: absolute;
-                font-size: 22px;
-                font-weight: bold;
-                color: lime;
-              }
-            </style>
-          </head>
-          <body>
+      if (!popup) return;
 
-            <div id="msg">You are an idiot 😜</div>
+      popup.document.open();
+      popup.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>DVD Bounce</title>
+          <style>
+            body {
+              margin: 0;
+              overflow: hidden;
+              background: black;
+              font-family: Arial, sans-serif;
+            }
+            #msg {
+              position: absolute;
+              font-size: 22px;
+              font-weight: bold;
+              color: lime;
+            }
+          </style>
+        </head>
+        <body>
 
-            <script>
-              const msg = document.getElementById("msg");
+          <div id="msg">You are an iidiot 😜</div>
 
-              let x = 50, y = 50;
-              let dx = 3, dy = 3;
+          <script>
+            const msg = document.getElementById("msg");
 
-              function randomColor() {
-                const colors = ["lime","cyan","yellow","magenta","orange","red"];
-                return colors[Math.floor(Math.random()*colors.length)];
-              }
+            let x = 50, y = 50;
+            let dx = 3 + Math.random() * 3;
+            let dy = 3 + Math.random() * 3;
 
-              function animateText() {
-                const maxX = window.innerWidth - msg.offsetWidth;
-                const maxY = window.innerHeight - msg.offsetHeight;
+            function randomColor() {
+              const colors = ["lime","cyan","yellow","magenta","orange","red"];
+              return colors[Math.floor(Math.random()*colors.length)];
+            }
 
-                x += dx;
-                y += dy;
+            function animateText() {
+              const maxX = window.innerWidth - msg.offsetWidth;
+              const maxY = window.innerHeight - msg.offsetHeight;
 
-                if (x <= 0 || x >= maxX) {
-                  dx *= -1;
-                  msg.style.color = randomColor();
-                }
+              x += dx;
+              y += dy;
 
-                if (y <= 0 || y >= maxY) {
-                  dy *= -1;
-                  msg.style.color = randomColor();
-                }
-
-                msg.style.left = x + "px";
-                msg.style.top = y + "px";
-
-                requestAnimationFrame(animateText);
+              if (x <= 0 || x >= maxX) {
+                dx *= -1;
+                msg.style.color = randomColor();
               }
 
-              animateText();
-            <\/script>
+              if (y <= 0 || y >= maxY) {
+                dy *= -1;
+                msg.style.color = randomColor();
+              }
 
-          </body>
-          </html>
-        `);
-        popup.document.close();
+              msg.style.left = x + "px";
+              msg.style.top = y + "px";
 
-        // --- WINDOW BOUNCE LOGIC ---
-        let winX = Math.random() * (screen.width - width);
-        let winY = Math.random() * (screen.height - height);
-        let winDX = 4;
-        let winDY = 4;
+              requestAnimationFrame(animateText);
+            }
 
-        function animateWindow() {
-          if (!popup || popup.closed) return;
+            animateText();
+          <\/script>
 
-          winX += winDX;
-          winY += winDY;
+        </body>
+        </html>
+      `);
+      popup.document.close();
 
-          if (winX <= 0 || winX >= screen.width - width) {
-            winDX *= -1;
-          }
+      // Window bounce logic
+      let winX = Math.random() * (screen.width - width);
+      let winY = Math.random() * (screen.height - height);
+      let winDX = 4 + Math.random() * 3;
+      let winDY = 4 + Math.random() * 3;
 
-          if (winY <= 0 || winY >= screen.height - height) {
-            winDY *= -1;
-          }
+      function animateWindow() {
+        if (!popup || popup.closed) return;
 
-          popup.moveTo(winX, winY);
-          requestAnimationFrame(animateWindow);
+        winX += winDX;
+        winY += winDY;
+
+        if (winX <= 0 || winX >= screen.width - width) {
+          winDX *= -1;
         }
 
-        animateWindow();
+        if (winY <= 0 || winY >= screen.height - height) {
+          winDY *= -1;
+        }
 
-        popups.push(popup);
+        popup.moveTo(winX, winY);
+        requestAnimationFrame(animateWindow);
       }
+
+      animateWindow();
+      popups.push(popup);
     }
 
     function closePopups() {
