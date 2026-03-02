@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>DVD Popup Demo</title>
+  <title>Ultimate DVD Popup Demo</title>
   <style>
     body {
       background: #111;
@@ -21,7 +21,7 @@
 </head>
 <body>
 
-  <h1>DVD Bouncing Popup Demo</h1>
+  <h1>DVD Window Bounce Demo</h1>
   <p>Educational popup demo (limited & safe)</p>
 
   <button onclick="openPopups()">Open Popups</button>
@@ -34,10 +34,13 @@
     function openPopups() {
       for (let i = 0; i < maxPopups; i++) {
 
+        const width = 400;
+        const height = 300;
+
         const popup = window.open(
           "",
           "",
-          "width=400,height=300"
+          `width=${width},height=${height}`
         );
 
         if (!popup) continue;
@@ -53,34 +56,32 @@
                 margin: 0;
                 overflow: hidden;
                 background: black;
-                color: lime;
                 font-family: Arial, sans-serif;
               }
-              #message {
+              #msg {
                 position: absolute;
                 font-size: 22px;
                 font-weight: bold;
+                color: lime;
               }
             </style>
           </head>
           <body>
 
-            <div id="message">You are an iidiot 😜</div>
+            <div id="msg">You are an idiot 😜</div>
 
             <script>
-              const msg = document.getElementById("message");
+              const msg = document.getElementById("msg");
 
-              let x = 50;
-              let y = 50;
-              let dx = 3;
-              let dy = 3;
+              let x = 50, y = 50;
+              let dx = 3, dy = 3;
 
               function randomColor() {
                 const colors = ["lime","cyan","yellow","magenta","orange","red"];
                 return colors[Math.floor(Math.random()*colors.length)];
               }
 
-              function animate() {
+              function animateText() {
                 const maxX = window.innerWidth - msg.offsetWidth;
                 const maxY = window.innerHeight - msg.offsetHeight;
 
@@ -100,16 +101,42 @@
                 msg.style.left = x + "px";
                 msg.style.top = y + "px";
 
-                requestAnimationFrame(animate);
+                requestAnimationFrame(animateText);
               }
 
-              animate();
+              animateText();
             <\/script>
 
           </body>
           </html>
         `);
         popup.document.close();
+
+        // --- WINDOW BOUNCE LOGIC ---
+        let winX = Math.random() * (screen.width - width);
+        let winY = Math.random() * (screen.height - height);
+        let winDX = 4;
+        let winDY = 4;
+
+        function animateWindow() {
+          if (!popup || popup.closed) return;
+
+          winX += winDX;
+          winY += winDY;
+
+          if (winX <= 0 || winX >= screen.width - width) {
+            winDX *= -1;
+          }
+
+          if (winY <= 0 || winY >= screen.height - height) {
+            winDY *= -1;
+          }
+
+          popup.moveTo(winX, winY);
+          requestAnimationFrame(animateWindow);
+        }
+
+        animateWindow();
 
         popups.push(popup);
       }
