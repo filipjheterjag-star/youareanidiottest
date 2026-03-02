@@ -22,17 +22,19 @@
 <body>
 
   <h1>DVD Bouncing Popup Demo</h1>
+  <p>Educational popup demo (limited & safe)</p>
+
   <button onclick="openPopups()">Open Popups</button>
   <button onclick="closePopups()">Close All</button>
 
   <script>
     let popups = [];
-    const maxPopups = 1000; // keep this reasonable
+    const maxPopups = 100;
 
     function openPopups() {
       for (let i = 0; i < maxPopups; i++) {
 
-        let popup = window.open(
+        const popup = window.open(
           "",
           "",
           "width=400,height=300"
@@ -40,6 +42,7 @@
 
         if (!popup) continue;
 
+        popup.document.open();
         popup.document.write(`
           <!DOCTYPE html>
           <html>
@@ -50,47 +53,63 @@
                 margin: 0;
                 overflow: hidden;
                 background: black;
-              }
-              #logo {
-                position: absolute;
-                font-family: Arial, sans-serif;
-                font-size: 24px;
-                font-weight: bold;
                 color: lime;
+                font-family: Arial, sans-serif;
+              }
+              #message {
+                position: absolute;
+                font-size: 22px;
+                font-weight: bold;
               }
             </style>
           </head>
           <body>
-            <div id="logo">You are an iidiot 😜</div>
+
+            <div id="message">You are an iidiot 😜</div>
 
             <script>
-              const logo = document.getElementById("logo");
-              let x = 100;
-              let y = 100;
-              let dx = 2;
-              let dy = 2;
+              const msg = document.getElementById("message");
+
+              let x = 50;
+              let y = 50;
+              let dx = 3;
+              let dy = 3;
+
+              function randomColor() {
+                const colors = ["lime","cyan","yellow","magenta","orange","red"];
+                return colors[Math.floor(Math.random()*colors.length)];
+              }
 
               function animate() {
-                const width = window.innerWidth - logo.offsetWidth;
-                const height = window.innerHeight - logo.offsetHeight;
+                const maxX = window.innerWidth - msg.offsetWidth;
+                const maxY = window.innerHeight - msg.offsetHeight;
 
                 x += dx;
                 y += dy;
 
-                if (x <= 0 || x >= width) dx *= -1;
-                if (y <= 0 || y >= height) dy *= -1;
+                if (x <= 0 || x >= maxX) {
+                  dx *= -1;
+                  msg.style.color = randomColor();
+                }
 
-                logo.style.left = x + "px";
-                logo.style.top = y + "px";
+                if (y <= 0 || y >= maxY) {
+                  dy *= -1;
+                  msg.style.color = randomColor();
+                }
+
+                msg.style.left = x + "px";
+                msg.style.top = y + "px";
 
                 requestAnimationFrame(animate);
               }
 
               animate();
             <\/script>
+
           </body>
           </html>
         `);
+        popup.document.close();
 
         popups.push(popup);
       }
@@ -98,9 +117,7 @@
 
     function closePopups() {
       popups.forEach(p => {
-        if (p && !p.closed) {
-          p.close();
-        }
+        if (p && !p.closed) p.close();
       });
       popups = [];
     }
