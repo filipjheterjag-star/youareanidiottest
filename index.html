@@ -29,12 +29,12 @@
 
   <script>
     let popups = [];
-    const maxTotalPopups = 10;
+    const maxTotalPopups = 25;
 
     function openPopup() {
 
       if (popups.length >= maxTotalPopups) {
-        alert("Maximum popup limit reached 😈");
+        alert("Maximum popup limit reached");
         return;
       }
 
@@ -72,7 +72,7 @@
         </head>
         <body>
 
-          <div id="msg">You are an iidiot 😜</div>
+          <div id="msg">You are an idiot </div>
 
           <script>
             const msg = document.getElementById("msg");
