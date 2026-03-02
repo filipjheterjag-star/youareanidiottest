@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Totally Serious Website</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: lime;
+      font-family: Comic Sans MS, cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 4rem;
+      animation: shake 0.2s infinite alternate;
+    }
+
+    @keyframes shake {
+      from { transform: translateX(-5px) rotate(-1deg); }
+      to { transform: translateX(5px) rotate(1deg); }
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <h1 id="text">YOU HAVE BEEN SELECTED</h1>
+    <button onclick="changeText()">Click Me (Important)</button>
+  </div>
+
+  <audio id="beep" loop>
+    <source src="https://www.soundjay.com/buttons/sounds/beep-07.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const messages = [
+      "YOU HAVE BEEN SELECTED",
+      "FOR ABSOLUTELY NOTHING",
+      "CONGRATULATIONS",
+      "THIS WAS A WASTE OF TIME",
+      "THANK YOU FOR PARTICIPATING"
+    ];
+
+    let index = 0;
+
+    function changeText() {
+      index = (index + 1) % messages.length;
+      document.getElementById("text").innerText = messages[index];
+      document.getElementById("beep").play();
+    }
+  </script>
+
+</body>
+</html>
